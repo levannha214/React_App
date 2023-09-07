@@ -1,0 +1,55 @@
+* {
+    font-family: 'Work Sans', sans-serif;
+}
+
+
+.banner {
+    box-shadow: 2px 2px 3px lightgrey;
+}
+
+.banner div {
+    display: flex;
+    align-items: center;
+
+}
+
+.banner div h5 {
+    margin-top: 7px;
+}
+
+.banner div span {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner div span:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+
+}
+
+#avatar {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+#avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 10px 0 0;
+}
+
+.navbar {
+    box-shadow: 2px 2px 3px lightgray;
+}
+
+.itemNavbar {
+
+    display: flex;
+    align-items: center;
+}

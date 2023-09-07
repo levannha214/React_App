@@ -1,0 +1,94 @@
+#bannerAdd button {
+    border: none;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+#bannerAdd button:hover {
+    background-color: lemonchiffon;
+}
+
+#bannerAdd button span {
+    font-size: 2rem;
+    color: red;
+}
+
+#bannerAdd div {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+
+#AddAnimal {
+    height: 580px;
+    overflow: scroll;
+}
+
+.fonmInputAdd {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+
+}
+
+.fromAdd {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fromAdd label {
+    font-size: 0.8rem;
+}
+
+.fonmInputAdd input {
+    border: none;
+    outline: none;
+
+}
+
+.codeQR h5 {
+    font-size: 0.9rem;
+}
+
+.dangerAnimal h5 {
+    font-size: 1rem;
+}
+
+.dangerAnimal p {
+    font-size: 0.8rem;
+}
+
+.textMin {
+    font-size: 0.8rem;
+}
+
+.textMax {
+    font-size: 2.5rem;
+}
+
+.avatarAnimal {
+    border: 1px dashed lightgray;
+    border-radius: 5px;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgAvatar {
+    border-radius: 5px;
+    width: 150px;
+    height: 150px;
+}
+
+#btnAdd {
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
