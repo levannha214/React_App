@@ -12,9 +12,6 @@ function Example({ idDelete }) {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
     }
-
-
-
     const CheckDelete = async () => {
         try {
             let res = await DeleteUser(headers, { data: idDelete, message: "Thành công" }).then(response => {

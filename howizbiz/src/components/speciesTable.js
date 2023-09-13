@@ -28,7 +28,6 @@ const SpeciesTable = () => {
     })
     const GetListAnimal = async (page, perpage, search) => {
         let res = await FecthAllUser(headers, { page, perpage, search }).then(reponse => {
-            console.log(reponse.data.list);
             setListAnimal(reponse.data.list);
             setTotalPage(reponse.data.pagination.total / perpage);
             setTotal(reponse.data.pagination.total);

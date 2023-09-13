@@ -6,11 +6,10 @@ import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
 import { ToastContainer, toast } from 'react-toastify';
 import GoogleMapReact from 'google-map-react';
-import { PostCreateUser } from "../api/service";
-
+import { PostCreateUser, GetRanks, PostImage } from "../api/service";
+import { SelectRanks, FilterList } from "../validate/selectRanks";
 
 const NewAnimal = ({ status, statusTable }) => {
-
     //  Add new animal
     const [kingdomValue, setKinhdomValue] = useState(null);
     const [phylumValue, setPhylumValue] = useState(null);
@@ -22,7 +21,7 @@ const NewAnimal = ({ status, statusTable }) => {
     const [che_do_quan_lys, setChe_do_quan_lys] = useState([]);
     const [cite_id, setCite_id] = useState(null);
     const [classs, setClasss] = useState(null);
-    const [class_id, setClass_id] = useState(13);
+    const [class_id, setClass_id] = useState(null);
     const [cong_bo, setCong_bo] = useState(true);
     const created_at = new Date();
     const [dac_diem_nhan_dang, setDac_diem_nhan_dang] = useState(null);
@@ -31,9 +30,9 @@ const NewAnimal = ({ status, statusTable }) => {
     const [danh_gia_so_luong_ca_the, setDanh_gia_so_luong_ca_the] = useState(null);
     const [dia_diem_bat_gap, setDia_diem_bat_gap] = useState(null);
     const [family, setFamily] = useState(null);
-    const [family_id, setFamily_id] = useState(526);
+    const [family_id, setFamily_id] = useState(null);
     const [genus, setGenus] = useState(null);
-    const [genus_id, setGenus_id] = useState(13954);
+    const [genus_id, setGenus_id] = useState(null);
     const [gia_tri_loai, setGia_tri_loai] = useState([]);
     const [gia_tri_loais, setGia_tri_loais] = useState([]);
     const [he_sinh_thais, setHe_sinh_thais] = useState([]);
@@ -44,7 +43,7 @@ const NewAnimal = ({ status, statusTable }) => {
     const [khu_vuc_ngoai_vqg_kbt, setKhu_vuc_ngoai_vqg_kbt] = useState(null);
     const [khu_vuc_vqg_kbt, setKhu_vuc_vqg_kbt] = useState(null);
     const [kingdom, setKingdom] = useState(null);
-    const [kingdom_id, setKingdom_id] = useState(1);
+    const [kingdom_id, setKingdom_id] = useState(null);
     const [la_loai_dac_huu, setLa_loai_dac_huu] = useState(false);
     const [loai_hien_trang, setLoai_hien_trang] = useState(null);
     const [loai_hien_trang_id, setLoai_hien_trang_id] = useState(null);
@@ -61,10 +60,10 @@ const NewAnimal = ({ status, statusTable }) => {
     const [suy_giam_quan_the_theo_thoi_diem_danh_gia, setSuy_giam_quan_the_theo_thoi_diem_danh_gia] = useState('Không xác định');
     const [nguon_du_lieu, setNguon_du_lieu] = useState(null);
     const [order, setOrder] = useState(null);
-    const [order_id, setOrder_id] = useState(114);
+    const [order_id, setOrder_id] = useState(null);
     const [phylumn, setPhylumn] = useState(null);
     const [phat_hien_loai, setPhat_hien_loai] = useState(null);
-    const [phylum_id, setPhylum_id] = useState(9);
+    const [phylum_id, setPhylum_id] = useState(null);
     const [provinces, setProvinces] = useState([]);
     const [qrcode_color, setQrcode_color] = useState("#fff");
     const [sach_do_id, setSach_do_id] = useState(null);
@@ -92,38 +91,53 @@ const NewAnimal = ({ status, statusTable }) => {
     const [vung_dem_kbt, setVung_dem_kbt] = useState(false);
     const [vung_loi_kbt, setVung_loi_kbt] = useState(false);
     const [path, setPath] = useState(null);
-    const options = [[
-        { value: 'Animalia - Động vật', label: 'Animalia - Động vật' },
-        { value: 'Plantae - Thực vật', label: 'Plantae - Thực vật' }],
-    [{ value: 'Anthocerotophyta - Ngành rêu sừng', label: 'Anthocerotophyta - Ngành rêu sừng' },
-    { value: 'Bryophyta - Ngành rêu', label: 'Bryophyta - Ngành rêu' },
-    { value: ' Charophyta - Ngành luân tảo', label: ' Charophyta - Ngành luân tảo' }],
-    [{ value: 'class tree - Lớp cây', label: 'class tree -Lớp cây' }],
-    [{ value: 'Myrtales - Bộ Đào Kim nương (Bộ Hương đào)', label: 'Myrtales - Bộ Đào Kim nương (Bộ Hương đào)' },
-    { value: ' Vitales - Bộ Nho', label: ' Vitales - Bộ Nho' },
-    { value: 'Apiales - Bộ Hoa tán', label: 'Apiales - Bộ Hoa tán' }
-    ],
-    [{ value: 'Araliaceae - Họ Cuồng', label: 'Araliaceae - Họ Cuồng' },
-    { value: 'Apiaceae - Họ Hoa tán', label: 'Apiaceae - Họ Hoa tán' },
-    { value: ' Pittosporaceae - Họ Hải đồng Họ Khuy áo/ Họ Hắc châu)', label: 'Pittosporaceae - Họ Hải đồng Họ Khuy áo/ Họ Hắc châu)' }],
-    [{ value: 'Epipterygium', label: 'Epipterygium' },
-    { value: 'Leptobryum', label: 'Leptobryum' },
-    { value: ' Acidodontium', label: ' Acidodontium' }]
-    ];
-
+    const [listRanks, setListRanks] = useState(null);
+    const [arrRanks, setArrRanks] = useState(null);
+    const [listKingdom, setListKinhdom] = useState([]);
+    const [listClass, setListClass] = useState([]);
+    const [listPhylum, setListPhylum] = useState([]);
+    const [listOrder, setListOrder] = useState([]);
+    const [listGenus, setListGenus] = useState([]);
+    const [listFamily, setListFamily] = useState([]);
     const [widthTable, setWidthTable] = useState('col-12 col-sm-12 col-md-8 col-xl-9 col-xxl-9 col-lg-9 py-3');
+    //species classification
+
+
     // set attachmenst
+    const PostImageFromData = async (fromData) => {
+        try {
+            let res = await PostImage(headers, fromData).then(response => {
+                if (response.status === 200) {
+                    setAttachments([response.data.data[0]]);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
     const UpdateAvatar = (e) => {
         const file = e.target.files[0];
         file.preview = URL.createObjectURL(file);
-        setPath(file.preview);
+        setPath(file);
+        const fromdata = new FormData();
+        fromdata.append('attachments[0]', file);
+        PostImageFromData(fromdata);
     }
 
     const KinhdomAnimal = () => {
+
         const [ten_khoa_hoc, ten] = kingdomValue.value.split('-');
+        for (let i = 0; i < listKingdom.length; i++) {
+            if (listKingdom[i].label === kingdomValue.label) {
+                setKingdom_id(listKingdom[i].uuid);
+                break;
+            }
+        }
+
+        setListPhylum(FilterList(arrRanks[1], kingdom_id));
         setKingdom({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            kingdom_id,
             mo_ta: null,
             ten_khoa_hoc,
             ten,
@@ -133,24 +147,39 @@ const NewAnimal = ({ status, statusTable }) => {
     }
 
     const PhylumAnimal = () => {
+
         const [ten_khoa_hoc, ten] = phylumValue.value.split('-');
+        for (let i = 0; i < listPhylum.length; i++) {
+            if (listPhylum[i].label === phylumValue.label) {
+                setPhylum_id(listPhylum[i].uuid);
+                break;
+            }
+        }
+        setListClass(FilterList(arrRanks[2], phylum_id));
         setPhylumn({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            id: phylum_id,
             ten,
             ten_khoa_hoc,
             mo_ta: null,
-            kingdom_id,
+            parent_id: kingdom_id,
             type: "Phylum"
         });
     }
     const ClassAnimal = () => {
+        for (let i = 0; i < listClass.length; i++) {
+            if (listClass[i].label === classValue.label) {
+                setClass_id(listClass[i].uuid);
+                break;
+            }
+        }
+        setListOrder(FilterList(arrRanks[3], class_id));
         const [ten_khoa_hoc, ten] = classValue.value.split('-');
         setClasss({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            id: class_id,
             mo_ta: null,
-            phylum_id,
+            parent_id: phylum_id,
             ten,
             ten_khoa_hoc,
             type: "Class",
@@ -158,12 +187,19 @@ const NewAnimal = ({ status, statusTable }) => {
         });
     }
     const OrderAnimal = () => {
+        for (let i = 0; i < listOrder.length; i++) {
+            if (listOrder[i].label === orderValue.label) {
+                setOrder_id(listOrder[i].uuid);
+                break;
+            }
+        }
+        setListFamily(FilterList(arrRanks[4], order_id));
         const [ten_khoa_hoc, ten] = orderValue.value.split('-');
         setOrder({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            id: order_id,
             mo_ta: null,
-            class_id,
+            parent_id: class_id,
             ten,
             ten_khoa_hoc,
             type: "Order",
@@ -171,12 +207,19 @@ const NewAnimal = ({ status, statusTable }) => {
         });
     }
     const FamilyAnimal = () => {
+        for (let i = 0; i < listFamily.length; i++) {
+            if (listFamily[i].label === familyValue.label) {
+                setFamily_id(listFamily[i].uuid);
+                break;
+            }
+        }
+        setListGenus(FilterList(arrRanks[5], family_id));
         const [ten_khoa_hoc, ten] = familyValue.value.split('-');
         setFamily({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            id: family_id,
             mo_ta: null,
-            order_id,
+            parent_id: order_id,
             ten,
             ten_khoa_hoc,
             type: "Family",
@@ -184,12 +227,19 @@ const NewAnimal = ({ status, statusTable }) => {
         });
     }
     const GenusAnimal = () => {
+        for (let i = 0; i < listGenus.length; i++) {
+            if (listGenus[i].label === genusValue.label) {
+                setGenus_id(listGenus[i].uuid);
+                break;
+            }
+        }
         const ten_khoa_hoc = genusValue.value;
+
         setGenus({
             created_at,
-            id: Math.floor(Math.random() * 10),
+            id: genus_id,
             mo_ta: null,
-            family_id,
+            parent_id: family_id,
             ten: null,
             ten_khoa_hoc,
             type: "Genus",
@@ -215,6 +265,7 @@ const NewAnimal = ({ status, statusTable }) => {
         progress: undefined,
         theme: "light",
     });
+
     const headers = {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -229,11 +280,11 @@ const NewAnimal = ({ status, statusTable }) => {
             });
         } catch (e) {
             toastify(e.response.data.errors.ten_khoa_hoc[0]);
-
         }
     }
     const AddNewAnimal = () => {
         if (ten && ten_khoa_hoc && kingdom && classs && family && order && genus && phylumn) {
+            if (path) { }
             let animal = {
                 attachments,
                 order_id,
@@ -269,16 +320,39 @@ const NewAnimal = ({ status, statusTable }) => {
                 ten_khoa_hoc,
                 ten_tac_gia,
                 toa_dos
-
             }
             CheckAddAnimal(animal);
         } else {
             toastify('Dữ liệu không thoả mãn !');
+        }
+    }
+    const GetListRanks = async () => {
+        try {
+            const res = await GetRanks(headers).then(response => {
+                if (response.status === 200) {
+                    setListRanks(response.data);
+                }
+            });
 
+        } catch (e) {
+            console.log(e);
         }
     }
 
     useEffect(() => {
+
+        if (listRanks === null) {
+            GetListRanks();
+        }
+        if (listRanks) {
+            setArrRanks(SelectRanks(listRanks));
+            setListClass(SelectRanks(listRanks)[2]);
+            setListKinhdom(SelectRanks(listRanks)[0]);
+            setListPhylum(SelectRanks(listRanks)[1]);
+            setListOrder(SelectRanks(listRanks)[3]);
+            setListFamily(SelectRanks(listRanks)[4]);
+            setListGenus(SelectRanks(listRanks)[5]);
+        }
         if (status) {
             setWidthTable('col-12 col-sm-12 col-md-11 col-xl-11 col-xxl-11 col-lg-11 py-3');
         } else {
@@ -304,7 +378,7 @@ const NewAnimal = ({ status, statusTable }) => {
         }
 
 
-    }, [status, kingdomValue, phylumValue, classValue, familyValue, genusValue, orderValue, path, attachments, ten, ten_khoa_hoc,
+    }, [listClass, listFamily, listKingdom, listGenus, listOrder, listPhylum, listRanks, status, kingdomValue, phylumValue, classValue, familyValue, genusValue, orderValue, path, attachments, ten, ten_khoa_hoc,
         cong_bo,
         dac_diem_loai,
         dac_diem_nhan_dang,
@@ -431,7 +505,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Giới'
                     defaultValue={kingdomValue}
                     onChange={setKinhdomValue}
-                    options={options[0]}
+                    options={listKingdom}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
 
                 />
@@ -442,7 +516,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Ngành'
                     defaultValue={phylumValue}
                     onChange={setPhylumValue}
-                    options={options[1]}
+                    options={listPhylum}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
                 />
             </div>
@@ -452,7 +526,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Lớp'
                     defaultValue={classValue}
                     onChange={setClassValue}
-                    options={options[2]}
+                    options={listClass}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
                 />
             </div>
@@ -462,7 +536,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Bộ'
                     defaultValue={orderValue}
                     onChange={setOrderValue}
-                    options={options[3]}
+                    options={listOrder}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
                 />
             </div>
@@ -472,7 +546,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Họ'
                     defaultValue={familyValue}
                     onChange={setFamilyValue}
-                    options={options[4]}
+                    options={listFamily}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
                 />
             </div>
@@ -482,7 +556,7 @@ const NewAnimal = ({ status, statusTable }) => {
                     placeholder='Chi'
                     defaultValue={genusValue}
                     onChange={setGenusValue}
-                    options={options[5]}
+                    options={listGenus}
                     className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"
                 />
             </div>
@@ -510,28 +584,28 @@ const NewAnimal = ({ status, statusTable }) => {
                 <p className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">- Suy Giảm Quần Thể Ít Nhất 50% Theo Quan Sát Hoặc Ước Tính Trong Mười (10) Năm Gần Nhất Hoặc Ba (03) Thế Hệ Cuối Tính Đến Thời Điểm Đánh Giá</p>
                 <div className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"> <Form>
                     {['radio'].map((type) => (
-                        <div key={`inline-${type}`} className="mb-3">
+                        <div key={`inline - ${type}`} className="mb-3">
                             <Form.Check
 
                                 inline
                                 label="Có"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-1`}
+                                id={`inline - ${type} - 1`}
                             />
                             <Form.Check
                                 inline
                                 label="Không"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-2`}
+                                id={`inline - ${type} - 2`}
                             />
                             <Form.Check
                                 inline
                                 name='group1'
                                 label="Không xác định"
                                 type={type}
-                                id={`inline-${type}-3`}
+                                id={`inline - ${type} - 3`}
                             />
                         </div>
                     ))}
@@ -539,27 +613,27 @@ const NewAnimal = ({ status, statusTable }) => {
                 <p className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">- Suy Giảm Ít Nhất 50% Trong 10 Năm Hoặc Ba (03) Thế Hệ Tiếp Theo Tính Từ Thời Điểm Đánh Giá</p>
                 <div className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12"> <Form>
                     {['radio'].map((type) => (
-                        <div key={`inline-${type}`} className="mb-3">
+                        <div key={`inline - ${type}`} className="mb-3">
                             <Form.Check
                                 inline
                                 label="Có"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-1`}
+                                id={`inline - ${type} - 1`}
                             />
                             <Form.Check
                                 inline
                                 label="Không"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-2`}
+                                id={`inline - ${type} - 2`}
                             />
                             <Form.Check
                                 inline
                                 name='group1'
                                 label="Không xác định"
                                 type={type}
-                                id={`inline-${type}-3`}
+                                id={`inline - ${type} - 3`}
                             />
                         </div>
                     ))}
@@ -582,27 +656,27 @@ const NewAnimal = ({ status, statusTable }) => {
                 <p className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12 ">- Nơi Cư Trú Hoặc Phân Bố Dưới 500 Km2 Và Quần Thể Bị Chia Cắt Nghiêm  Trọng</p>
                 <div className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12 my-2"> <Form>
                     {['radio'].map((type) => (
-                        <div key={`inline-${type}`} className="mb-3">
+                        <div key={`inline - ${type}`} className="mb-3">
                             <Form.Check
                                 inline
                                 label="Có"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-1`}
+                                id={`inline - ${type} - 1`}
                             />
                             <Form.Check
                                 inline
                                 label="Không"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-2`}
+                                id={`inline - ${type} - 2`}
                             />
                             <Form.Check
                                 inline
                                 name='group1'
                                 label="Không xác định"
                                 type={type}
-                                id={`inline-${type}-3`}
+                                id={`inline - ${type} - 3`}
                             />
                         </div>
                     ))}
@@ -610,27 +684,27 @@ const NewAnimal = ({ status, statusTable }) => {
                 <p className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">- Suy Giảm Liên Tục Về Khu Vực Phân Bố, Nơi Cư Trú</p>
                 <div className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12 my-2"> <Form>
                     {['radio'].map((type) => (
-                        <div key={`inline-${type}`} className="mb-3">
+                        <div key={`inline - ${type}`} className="mb-3">
                             <Form.Check
                                 inline
                                 label="Có"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-1`}
+                                id={`inline - ${type} - 1`}
                             />
                             <Form.Check
                                 inline
                                 label="Không"
                                 name="group1"
                                 type={type}
-                                id={`inline-${type}-2`}
+                                id={`inline - ${type} - 2`}
                             />
                             <Form.Check
                                 inline
                                 name='group1'
                                 label="Không xác định"
                                 type={type}
-                                id={`inline-${type}-3`}
+                                id={`inline - ${type} - 3`}
                             />
                         </div>
                     ))}
@@ -691,7 +765,7 @@ const NewAnimal = ({ status, statusTable }) => {
                 <p className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Bộ sưu tập - Hình ảnh minh họa</p>
                 <div className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12 d-flex">
                     <label className="avatarAnimal" htmlFor="imgAvatar">+</label>
-                    {path && <img src={path} alt='logo.png' className="imgAvatar mx-2" />}
+                    {path && <img src={path.preview} alt='logo.png' className="imgAvatar mx-2" />}
                 </div>
                 <input type="file" id='imgAvatar' name="imgAvatar" hidden onChange={UpdateAvatar} />
             </div>
@@ -717,14 +791,14 @@ const NewAnimal = ({ status, statusTable }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 px-2 d-flex">
                 <Form>
                     {['checkbox'].map((type) => (
-                        <div key={`inline-${type}`} className="p-3">
+                        <div key={`inline - ${type}`} className="p-3">
                             <Form.Check
                                 className="my-4"
                                 inline
                                 label="Vùng lõi khu bảo tồn"
                                 name="null"
                                 type={type}
-                                id={`inline-${type}-1`}
+                                id={`inline - ${type} - 1`}
                             />
                             <Form.Check
                                 className="my-3"
@@ -732,7 +806,7 @@ const NewAnimal = ({ status, statusTable }) => {
                                 label="Vùng đệm khu bảo tồn"
                                 name="null"
                                 type={type}
-                                id={`inline-${type}-2`}
+                                id={`inline - ${type} - 2`}
                             />
 
                         </div>
@@ -825,7 +899,7 @@ const NewAnimal = ({ status, statusTable }) => {
             <div className="col-6 col-sm-6 col-md-6 col-xl-6 col-xxl-6 col-lg-6">
                 <Form>
                     {['checkbox'].map((type) => (
-                        <div key={`inline-${type}`}>
+                        <div key={`inline - ${type}`}>
                             <Form.Check
                                 className="m-4 "
                                 inline

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import '../style/table.css';
 import SpeciesTable from "./speciesTable";
-
+import TableUser from "./TableUser";
 const TableAnimal = ({ status, table }) => {
     const [widthTable, setWidthTable] = useState('col-12 col-sm-12 col-md-8 col-xl-9 col-xxl-9 col-lg-9 py-3');
     useEffect(() => {
@@ -19,6 +19,7 @@ const TableAnimal = ({ status, table }) => {
             <div className="d-flex p-2"><h4><strong>{table.name}</strong></h4></div>
         </div>
         {table.name === 'Loài nguy cấp quý hiếm' ? <SpeciesTable /> : <></>}
+        {table.name === 'Quản lý người dùng' ? <TableUser /> : <></>}
     </div>)
 
 }

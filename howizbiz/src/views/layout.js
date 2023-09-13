@@ -7,9 +7,12 @@ import { useEffect, useState, createContext } from 'react';
 import Navbar from '../components/navbar';
 import NewAnimal from '../components/newAnimal';
 import UpdateAnimalId from '../components/UpdateId';
+import Logout from '../components/logout';
+import { GetUser } from '../api/service';
 const UserContext = createContext();
 
 const Layout = () => {
+    const [user, setUser] = useState(null);
     const [statusTable, setStatusTable] = useState('list');
     const [menu, setMenu] = useState(false);
 
@@ -47,6 +50,11 @@ const Layout = () => {
         name: 'Danh mục'
     }
     ];
+    const headers = {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+    }
     const [contentTable, setContentTable] = useState(<TableAnimal status={menu} table={navbar[table]} />);
     const [windowDimention, setWindowDimention] = useState({
         windowWidth: window.innerWidth
@@ -63,8 +71,22 @@ const Layout = () => {
             setText(textBanner);
         }
     }
+    const GetUserMe = async () => {
+        try {
+            let res = await GetUser(headers).then(response => {
+                if (response.status === 200) {
+
+                    setUser(response.data.user);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
     useEffect(() => {
         window.addEventListener('resize', detectSize);
+        GetUserMe();
         if (statusTable === 'list') {
             setContentTable(< TableAnimal status={menu} table={navbar[table]} />)
         } else if (statusTable === 'add') {
@@ -77,6 +99,7 @@ const Layout = () => {
             window.removeEventListener('resize', detectSize);
         }
     }, [windowDimention, statusTable, menu]);
+
     return (<div className='col-12 col-sm-12  col-md-12 col-xl-12 col-xxl-12 col-lg-12'>
         <div className='col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 d-flex p-3 banner'>
             <div className='col-7 col-sm-8 col-md-9 col-lg-10 col-xl-10 col-xxl-10 d-flex'>
@@ -86,10 +109,7 @@ const Layout = () => {
                 <img src={logo} style={{ width: '30px', height: 'auto' }} alt='logo' className='mx-3' />
                 <h5>{text}</h5>
             </div>
-            <div className='col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2' id='avatar'>
-                <img src='https://investone-law.com/wp-content/uploads/2019/06/chu-t.png' />
-                <div>Quản lý dự án</div>
-            </div>
+            <Logout user={user} />
         </div>
         <UserContext.Provider value={[statusTable, setStatusTable]}>
             <div className='col-12 col-sm-12  col-md-12 col-xl-12 col-xxl-12 col-lg-12 d-flex'>

@@ -322,7 +322,6 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
         },
         zoom: 11
     };
-
     const toastify = (validate) => toast.error(validate, {
         position: "top-right",
         autoClose: 5000,
@@ -357,7 +356,6 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
         OrderAnimal();
         FamilyAnimal();
         GenusAnimal();
-
         if (ten !== '' && ten_khoa_hoc !== '' && kingdom && classs && family && order && genus && phylumn) {
             let animal = {
                 attachments,
@@ -439,7 +437,6 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
     }
 
     useEffect(() => {
-
         if (status) {
             setWidthTable('col-12 col-sm-12 col-md-11 col-xl-11 col-xxl-11 col-lg-11 py-3');
         } else {
@@ -611,7 +608,7 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 p-2 fromAdd ">
                 <label className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Ngành <i className="text-danger">*</i></label>
                 <Select
-                    defaultInputValue={`${animal.phylumn.ten_khoa_hoc}-${animal.phylumn.ten}`}
+                    defaultInputValue={animal.phylumn.ten ? `${animal.phylumn.ten_khoa_hoc}-${animal.phylumn.ten}` : animal.phylumn.ten_khoa_hoc}
                     placeholder='Ngành'
                     defaultValue={phylumValue}
                     onChange={setPhylumValue}
@@ -622,7 +619,7 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 p-2 fromAdd ">
                 <label className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Lớp<i className="text-danger">*</i></label>
                 <Select
-                    defaultInputValue={`${animal.class.ten_khoa_hoc && animal.class.ten_khoa_hoc}-${animal.class.ten && animal.class.ten}`}
+                    defaultInputValue={animal.class.ten ? `${animal.class.ten_khoa_hoc}-${animal.class.ten && animal.class.ten}` : animal.class.ten_khoa_hoc}
                     placeholder='Lớp'
                     defaultValue={classValue}
                     onChange={setClassValue}
@@ -633,7 +630,7 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 p-2 fromAdd ">
                 <label className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Bộ <i className="text-danger">*</i></label>
                 <Select
-                    defaultInputValue={`${animal.order.ten_khoa_hoc}-${animal.order.ten}`}
+                    defaultInputValue={animal.order.ten ? `${animal.order.ten_khoa_hoc}-${animal.order.ten}` : animal.order.ten_khoa_hoc}
                     placeholder='Bộ'
                     defaultValue={orderValue}
                     onChange={setOrderValue}
@@ -644,7 +641,7 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 p-2 fromAdd ">
                 <label className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Họ <i className="text-danger">*</i></label>
                 <Select
-                    defaultInputValue={`${animal.family.ten_khoa_hoc && animal.family.ten_khoa_hoc}-${animal.family.ten && animal.family.ten}`}
+                    defaultInputValue={animal.family.ten ? `${animal.family.ten_khoa_hoc}-${animal.family.ten && animal.family.ten}` : animal.family.ten}
                     placeholder='Họ'
                     defaultValue={familyValue}
                     onChange={setFamilyValue}
@@ -655,7 +652,7 @@ const UpdateAnimalId = ({ status, statusTable, animal }) => {
             <div className="col-4 col-sm-4 col-md-4 col-xl-4 col-xxl-4 col-lg-4 p-2 fromAdd ">
                 <label className="col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12 col-lg-12">Chi <i className="text-danger">*</i></label>
                 <Select
-                    defaultInputValue={`${animal.genus.ten_khoa_hoc && animal.genus.ten_khoa_hoc}-${animal.genus.ten && animal.genus.ten}`}
+                    defaultInputValue={animal.genus.ten ? `${animal.genus.ten_khoa_hoc}-${animal.genus.ten && animal.genus.ten}` : animal.genus.ten}
                     placeholder='Chi'
                     defaultValue={genusValue}
                     onChange={setGenusValue}

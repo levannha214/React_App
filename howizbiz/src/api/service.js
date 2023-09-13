@@ -19,4 +19,13 @@ const DeleteUser = (headers, animal) => {
 const LoginApi = (username, password) => {
     return axios.post('https://wlp.howizbiz.com/api/web-authenticate', { username, password });
 }
-export { FecthAllUser, PostCreateUser, UpdateUser, DeleteUser, LoginApi };
+const GetRanks = (headers) => {
+    return axios.get('https://wlp.howizbiz.com/api/phanloaihoc?ranks[]=Kingdom&ranks[]=Phylum&ranks[]=Class&ranks[]=Order&ranks[]=Family&ranks[]=Genus', headers);
+}
+const GetUser = (headers) => {
+    return axios.get('https://wlp.howizbiz.com/api/me', headers);
+}
+const PostImage = (headers, formData) => {
+    return axios.post('https://wlp.howizbiz.com/api/attach-multiple-feature-file', formData, headers);
+}
+export { FecthAllUser, PostCreateUser, UpdateUser, DeleteUser, LoginApi, GetRanks, GetUser, PostImage };

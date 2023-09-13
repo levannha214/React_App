@@ -9,6 +9,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
+
         <Route index element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user_management" element={<Layout />} />
